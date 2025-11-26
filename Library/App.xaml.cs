@@ -2,11 +2,18 @@
 {
     public partial class App : Application
     {
-        public App()
+        private readonly AppShellViewModel _appShellViewModel;
+
+        public App(AppShellViewModel viewModel)
         {
             InitializeComponent();
-
-            MainPage = new AppShell();
+            _appShellViewModel = viewModel;
         }
+
+        protected override Window CreateWindow(IActivationState? activationState) =>
+            new Window(new AppShell()
+            {
+                BindingContext = _appShellViewModel
+            });
     }
 }

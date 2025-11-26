@@ -1,0 +1,321 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:ndtp="clr-namespace:Maui.NullableDateTimePicker;assembly=Maui.NullableDateTimePicker"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:book="clr-namespace:Library.Pages.Book"
+    x:Class="Library.Pages.Person.PersonEditPage"
+    xmlns:local="clr-namespace:Library.Pages.Person"
+    x:DataType="local:PersonEditViewModel"
+    x:Name="Page"
+    Title="Редактирование владельца">
+
+    <Grid
+        RowDefinitions="*, auto">
+
+        <ScrollView
+            Grid.Row="0"
+            Padding="5">
+            <VerticalStackLayout>
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Изображение"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Image
+                            HeightRequest="200"
+                            Aspect="AspectFit"
+                            Source="{Binding Path=EditPerson.ImagePath}">
+
+                            <Image.GestureRecognizers>
+                                <TapGestureRecognizer
+                                    Command="{Binding Path=ImageMenuCommand}"
+                                    NumberOfTapsRequired="2" />
+                            </Image.GestureRecognizers>
+                        </Image>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Основные сведения"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Label
+                            Text="ФИО:" />
+                        <Entry
+                            Text="{Binding Path=EditPerson.Person.Name}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Комментарий"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Editor
+                            AutoSize="TextChanges"
+                            Text="{Binding Path=EditPerson.Person.Comment}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Мои книги в моей библиотеке"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditPerson.MyBooksInMyLibrary}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="book:BooksModel">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding Path=Book.Name}" />
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Authors}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Мои книги в чужих библиотеках"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditPerson.MyBooksInOtherPersonsLibrary}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="book:BooksModel">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding Path=Book.Name}" />
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Authors}" />
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Book.Location.Name}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Чужие книги в моей библиотеке"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditPerson.OtherPersonsBooksInMyLibrary}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="book:BooksModel">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    FontAttributes="Bold"
+                                                    Text="{Binding Path=Book.Name}" />
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Authors}" />
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Book.Owner.Name}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button
+            Grid.Row="1"
+            Text="Сохранить"
+            Margin="5"
+            Command="{Binding Path=SavePersonCommand}" />
+    </Grid>
+</ContentPage>

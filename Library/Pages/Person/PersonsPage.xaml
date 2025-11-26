@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Library.Pages.Person.PersonsPage"
+    xmlns:local="clr-namespace:Library.Pages.Person"
+    x:DataType="local:PersonsViewModel"
+    x:Name="Page"
+    Title="Владельцы">
+
+    <Grid
+        RowDefinitions="auto, *">
+        
+        <SearchBar
+            Grid.Row="0"
+            x:Name="personsSearchBar"
+            Margin="0, 0, 0, 5"
+            Placeholder="Поиск владельцев"
+            Text="{Binding Path=SearchPersonsString}">
+
+            <SearchBar.Behaviors>
+                <toolkit:EventToCommandBehavior
+                    BindingContext="{Binding Path=BindingContext, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                    Command="{Binding Path=SearchPersonsCommand, x:DataType={x:Type local:PersonsViewModel}}"
+                    CommandParameter="{Binding Path=Text, x:DataType='SearchBar', Source={x:Reference personsSearchBar}}"
+                    EventName="TextChanged" />
+            </SearchBar.Behaviors>
+        </SearchBar>
+        
+        <ListView
+            Grid.Row="1"
+            ItemsSource="{Binding Path=FilteredPersons}"
+            HasUnevenRows="True"
+            SelectionMode="None"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding Path=RefreshCommand}"
+            IsRefreshing="{Binding Path=IsRefreshing}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:PersonsModel">
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Border
+                                Margin="5, 2.5, 5, 2.5">
+                                <Grid
+                                    ColumnDefinitions="0.25*, *"
+                                    RowDefinitions="1.5*, *">
+
+                                    <Image
+                                        Grid.Column="0"
+                                        Grid.RowSpan="2"
+                                        HeightRequest="40"
+                                        Margin="0, 0, 0, 0"
+                                        Source="{Binding Path=ImagePath}" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        Text="{Binding Path=Person.Name}" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="1"
+                                        Text="{Binding Path=Person.Comment}" />
+                                </Grid>
+                            </Border>
+                        </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                Text="Изменить"
+                                Command="{Binding Path=BindingContext.EditPersonCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                            <MenuItem
+                                Text="Удалить"
+                                Command="{Binding Path=BindingContext.RemovePersonCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                        </ViewCell.ContextActions>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button
+            Grid.RowSpan="2"
+            HeightRequest="80"
+            WidthRequest="80"
+            CornerRadius="40"
+            Padding="0"
+            FontAttributes="Bold"
+            FontSize="50"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="0, 0, 20, 20"
+            Text="+"
+            Command="{Binding Path=EditPersonCommand}" />
+    </Grid>
+</ContentPage>

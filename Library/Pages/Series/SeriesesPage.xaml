@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Library.Pages.Series.SeriesesPage"
+    xmlns:local="clr-namespace:Library.Pages.Series"
+    x:DataType="local:SeriesesViewModel"
+    x:Name="Page"
+    Title="Серии">
+
+    <Grid RowDefinitions="auto, *">
+        <SearchBar
+            Grid.Row="0"
+            x:Name="seriesesSearchBar"
+            Margin="0, 0, 0, 5"
+            Placeholder="Поиск серий"
+            Text="{Binding Path=SearchSeriesesString}">
+
+            <SearchBar.Behaviors>
+                <toolkit:EventToCommandBehavior
+                    BindingContext="{Binding Path=BindingContext, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                    Command="{Binding Path=SearchSeriesesCommand, x:DataType={x:Type local:SeriesesViewModel}}"
+                    CommandParameter="{Binding Path=Text, x:DataType='SearchBar', Source={x:Reference seriesesSearchBar}}"
+                    EventName="TextChanged" />
+            </SearchBar.Behaviors>
+        </SearchBar>
+
+        <ListView
+            Grid.Row="1"
+            ItemsSource="{Binding Path=FilteredSerieses}"
+            CachingStrategy="RecycleElementAndDataTemplate"
+            HasUnevenRows="True"
+            SelectionMode="None"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding Path=RefreshCommand}"
+            IsRefreshing="{Binding Path=IsRefreshing}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:SeriesesModel">
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Border
+                                Margin="5, 2.5, 5, 2.5">
+
+                                <VerticalStackLayout>
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        Text="{Binding Path=Series.Name}" />
+                                </VerticalStackLayout>
+                            </Border>
+                        </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                Text="Изменить"
+                                Command="{Binding Path=BindingContext.EditSeriesCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                            <MenuItem
+                                Text="Удалить"
+                                Command="{Binding Path=BindingContext.RemoveSeriesCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                        </ViewCell.ContextActions>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button
+            Grid.RowSpan="2"
+            HeightRequest="80"
+            WidthRequest="80"
+            CornerRadius="40"
+            Padding="0"
+            FontAttributes="Bold"
+            FontSize="50"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="0, 0, 20, 20"
+            Text="+"
+            Command="{Binding Path=EditSeriesCommand}" />
+    </Grid>
+</ContentPage>

@@ -1,0 +1,233 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Library.Pages.Series.SeriesEditPage"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:local="clr-namespace:Library.Pages.Series"
+    xmlns:book="clr-namespace:Library.Pages.Book"
+    xmlns:content="clr-namespace:Library.Pages.Book.Content"
+    x:DataType="local:SeriesEditViewModel"
+    x:Name="Page"
+    Title="Редактирование серии">
+
+    <Grid
+        RowDefinitions="*, auto">
+
+        <ScrollView
+            Grid.Row="0"
+            Padding="5">
+            <VerticalStackLayout>
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Основные сведения"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Label
+                            Text="Название:" />
+                        <Entry
+                            Text="{Binding Path=EditSeries.Series.Name}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Комментарий"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Editor
+                            AutoSize="TextChanges"
+                            Text="{Binding Path=EditSeries.Series.Comment}" />
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Книги"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditSeries.Books}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate
+                                        x:DataType="book:BooksModel">
+                                        
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    FontAttributes="Bold">
+
+                                                    <Label.Text>
+                                                        <MultiBinding
+                                                            StringFormat="{}{0}. {1}">
+                                                            <Binding
+                                                                TargetNullValue="0"
+                                                                Path="Book.SeriesNumber" />
+                                                            <Binding
+                                                                Path="Book.Name" />
+                                                        </MultiBinding>
+                                                    </Label.Text>
+                                                </Label>
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Authors}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Произведения"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditSeries.Contents}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="content:ContentsModel">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <VerticalStackLayout>
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="0"
+                                                    FontAttributes="Bold">
+
+                                                    <Label.Text>
+                                                        <MultiBinding StringFormat="{}{0}. {1}">
+                                                            <Binding
+                                                                TargetNullValue="0"
+                                                                Path="Content.SeriesNumber" />
+                                                            <Binding
+                                                                Path="Content.Name" />
+                                                        </MultiBinding>
+                                                    </Label.Text>
+                                                </Label>
+
+                                                <Label
+                                                    Grid.Column="1"
+                                                    Grid.Row="1"
+                                                    Text="{Binding Path=Authors}" />
+                                            </VerticalStackLayout>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button
+            Grid.Row="1"
+            Text="Сохранить"
+            Margin="5"
+            Command="{Binding Path=SaveSeriesCommand}" />
+    </Grid>
+</ContentPage>

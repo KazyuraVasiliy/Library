@@ -1,0 +1,392 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Library.Pages.Book.Content.ContentEditPage"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    xmlns:ndtp="clr-namespace:Maui.NullableDateTimePicker;assembly=Maui.NullableDateTimePicker"
+    xmlns:local="clr-namespace:Library.Pages.Book.Content"
+    xmlns:db="clr-namespace:DataAccess.Models;assembly=DataAccess"
+    x:DataType="local:ContentEditViewModel"
+    x:Name="Page"
+    Title="Редактирование содержания">
+
+    <Grid
+        RowDefinitions="*, auto">
+
+        <ScrollView
+            Padding="5">
+            <VerticalStackLayout>
+                <Border>
+                    <VerticalStackLayout>
+                        <Label
+                            Text="Основные сведения"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <Label
+                            Text="Название:" />
+                        <Entry
+                            Text="{Binding Path=EditContent.Content.Name}" />
+
+                        <Grid
+                            ColumnDefinitions="*, *">
+
+                            <VerticalStackLayout
+                                Grid.Column="0">
+
+                                <Label
+                                    Text="Язык:" />
+                                <Picker
+                                    ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Language}}"
+                                    ItemsSource="{Binding Path=Languages}"
+                                    SelectedItem="{Binding Path=EditContent.Content.Language}" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout
+                                Grid.Column="1">
+
+                                <Label
+                                    Text="Год написания:" />
+                                <Entry
+                                    Text="{Binding Path=EditContent.Content.WriteYear}"
+                                    Keyboard="Numeric" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Grid
+                            ColumnDefinitions="2*, *">
+
+                            <VerticalStackLayout
+                                Grid.Column="0">
+
+                                <Label
+                                    Text="Серия:" />
+                                <Picker
+                                    ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Series}}"
+                                    ItemsSource="{Binding Path=Serieses}"
+                                    SelectedItem="{Binding Path=EditContent.Content.Series}" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout
+                                Grid.Column="1">
+
+                                <Label
+                                    Text="Номер в серии:" />
+                                <Entry
+                                    Text="{Binding Path=EditContent.Content.SeriesNumber}"
+                                    Keyboard="Numeric" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Grid
+                            ColumnDefinitions="*, *">
+
+                            <VerticalStackLayout
+                                Grid.Column="0">
+
+                                <Label
+                                    Text="Страница:" />
+                                <Entry
+                                    Text="{Binding Path=EditContent.Content.PageNumber}"
+                                    Keyboard="Numeric" />
+                            </VerticalStackLayout>
+
+                            <VerticalStackLayout
+                                Grid.Column="1">
+
+                                <Label
+                                    Text="Уровень в содержании:" />
+                                <Entry
+                                    Text="{Binding Path=EditContent.Content.Level}"
+                                    Keyboard="Numeric" />
+                            </VerticalStackLayout>
+                        </Grid>
+
+                        <Label
+                            Text="Статус" />
+                        <Picker
+                            ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Status}}"
+                            ItemsSource="{Binding Path=Statuses}"
+                            SelectedItem="{Binding Path=EditContent.Content.Status}" />
+
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander
+                        IsExpanded="True">
+
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Авторы"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditContent.Authors}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="db:Author">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <Grid
+                                                ColumnDefinitions="*, auto">
+
+                                                <Label
+                                                    Grid.Column="0"
+                                                    Text="{Binding Name}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Text="&#xf068;"
+                                                    FontFamily="FontAwesomeSolid"
+                                                    FontSize="10"
+                                                    Padding="0"
+                                                    MaximumWidthRequest="20"
+                                                    MaximumHeightRequest="20"
+                                                    Command="{Binding Path=BindingContext.RemoveAuthorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <SearchBar
+                                x:Name="authorsSearchBar"
+                                Text="{Binding Path=SearchAuthorsString}">
+
+                                <SearchBar.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        BindingContext="{Binding Path=BindingContext, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                        Command="{Binding Path=SearchAuthorsCommand, x:DataType={x:Type local:ContentEditViewModel}}"
+                                        CommandParameter="{Binding Path=Text, x:DataType='SearchBar', Source={x:Reference authorsSearchBar}}"
+                                        EventName="TextChanged" />
+                                </SearchBar.Behaviors>
+
+                                <SearchBar.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Path=CreateNewAuthorCommand}"
+                                        NumberOfTapsRequired="2" />
+                                </SearchBar.GestureRecognizers>
+                            </SearchBar>
+
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=FilteredAuthors}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="db:Author">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <Grid
+                                                ColumnDefinitions="*, auto">
+
+                                                <Label
+                                                    Grid.Column="0"
+                                                    Text="{Binding Name}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Text="&#x002b;"
+                                                    FontSize="10"
+                                                    FontFamily="FontAwesomeSolid"
+                                                    Padding="0"
+                                                    MaximumWidthRequest="20"
+                                                    MaximumHeightRequest="20"
+                                                    Command="{Binding Path=BindingContext.AddAuthorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+
+                <Border>
+                    <toolkit:Expander>
+                        <toolkit:Expander.Header>
+                            <Grid
+                                ColumnDefinitions="*, auto">
+
+                                <Label
+                                    Grid.Column="0"
+                                    Text="Переводчики"
+                                    Margin="0"
+                                    Style="{StaticResource SubHeadline}">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Margin"
+                                                Value="0, 0, 0, 5" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+
+                                <Label
+                                    Grid.Column="1"
+                                    VerticalTextAlignment="Center"
+                                    Margin="0, 0, 10, 0"
+                                    FontSize="16"
+                                    Text="&#xf0d7;"
+                                    FontFamily="FontAwesomeSolid">
+
+                                    <Label.Triggers>
+                                        <DataTrigger
+                                            TargetType="Label"
+                                            Binding="{Binding Source={RelativeSource AncestorType={x:Type toolkit:Expander}}, x:DataType={x:Type toolkit:Expander}, Path=IsExpanded}"
+                                            Value="True">
+
+                                            <Setter
+                                                Property="Text"
+                                                Value="&#xf0d8;" />
+                                        </DataTrigger>
+                                    </Label.Triggers>
+                                </Label>
+                            </Grid>
+                        </toolkit:Expander.Header>
+
+                        <VerticalStackLayout>
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=EditContent.Translators}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="db:Translator">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <Grid
+                                                ColumnDefinitions="*, auto">
+
+                                                <Label
+                                                    Grid.Column="0"
+                                                    Text="{Binding Name}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Text="&#xf068;"
+                                                    FontFamily="FontAwesomeSolid"
+                                                    FontSize="10"
+                                                    Padding="0"
+                                                    MaximumWidthRequest="20"
+                                                    MaximumHeightRequest="20"
+                                                    Command="{Binding Path=BindingContext.RemoveTranslatorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+
+                            <SearchBar
+                                x:Name="translatorsSearchBar"
+                                Text="{Binding Path=SearchTranslatorsString}">
+
+                                <SearchBar.Behaviors>
+                                    <toolkit:EventToCommandBehavior
+                                        BindingContext="{Binding Path=BindingContext, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                        Command="{Binding Path=SearchTranslatorsCommand, x:DataType={x:Type local:ContentEditViewModel}}"
+                                        CommandParameter="{Binding Path=Text, x:DataType='SearchBar', Source={x:Reference translatorsSearchBar}}"
+                                        EventName="TextChanged" />
+                                </SearchBar.Behaviors>
+
+                                <SearchBar.GestureRecognizers>
+                                    <TapGestureRecognizer
+                                        Command="{Binding Path=CreateNewTranslatorCommand}"
+                                        NumberOfTapsRequired="2" />
+                                </SearchBar.GestureRecognizers>
+                            </SearchBar>
+
+                            <CollectionView
+                                SelectionMode="None"
+                                ItemsSource="{Binding Path=FilteredTranslators}">
+
+                                <CollectionView.ItemTemplate>
+                                    <DataTemplate x:DataType="db:Translator">
+                                        <Border
+                                            Padding="10, 5, 10, 5">
+
+                                            <Grid
+                                                ColumnDefinitions="*, auto">
+
+                                                <Label
+                                                    Grid.Column="0"
+                                                    Text="{Binding Name}" />
+                                                <Button
+                                                    Grid.Column="1"
+                                                    Text="&#x002b;"
+                                                    FontSize="10"
+                                                    FontFamily="FontAwesomeSolid"
+                                                    Padding="0"
+                                                    MaximumWidthRequest="20"
+                                                    MaximumHeightRequest="20"
+                                                    Command="{Binding Path=BindingContext.AddTranslatorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                                    CommandParameter="{Binding .}" />
+                                            </Grid>
+                                        </Border>
+                                    </DataTemplate>
+                                </CollectionView.ItemTemplate>
+                            </CollectionView>
+                        </VerticalStackLayout>
+                    </toolkit:Expander>
+                </Border>
+
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button
+            Grid.Row="1"
+            Text="Сохранить"
+            Margin="5"
+            Command="{Binding Path=SaveContentCommand}" />
+    </Grid>
+</ContentPage>

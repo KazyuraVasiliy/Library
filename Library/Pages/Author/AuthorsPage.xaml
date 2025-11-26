@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:toolkit="http://schemas.microsoft.com/dotnet/2022/maui/toolkit"
+    x:Class="Library.Pages.Author.AuthorsPage"
+    xmlns:local="clr-namespace:Library.Pages.Author"
+    x:DataType="local:AuthorsViewModel"
+    x:Name="Page"
+    Title="Авторы">
+
+    <Grid
+        RowDefinitions="auto, *">
+        
+        <SearchBar
+            Grid.Row="0"
+            x:Name="authorsSearchBar"
+            Margin="0, 0, 0, 5"
+            Placeholder="Поиск авторов"
+            Text="{Binding Path=SearchAuthorsString}">
+
+            <SearchBar.Behaviors>
+                <toolkit:EventToCommandBehavior
+                    BindingContext="{Binding Path=BindingContext, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                    Command="{Binding Path=SearchAuthorsCommand, x:DataType={x:Type local:AuthorsViewModel}}"
+                    CommandParameter="{Binding Path=Text, x:DataType='SearchBar', Source={x:Reference authorsSearchBar}}"
+                    EventName="TextChanged" />
+            </SearchBar.Behaviors>
+        </SearchBar>
+        
+        <ListView
+            Grid.Row="1"
+            ItemsSource="{Binding Path=FilteredAuthors}"
+            CachingStrategy="RecycleElementAndDataTemplate"
+            HasUnevenRows="True"
+            SelectionMode="None"
+            SeparatorVisibility="None"
+            IsPullToRefreshEnabled="True"
+            RefreshCommand="{Binding Path=RefreshCommand}"
+            IsRefreshing="{Binding Path=IsRefreshing}">
+
+            <ListView.ItemTemplate>
+                <DataTemplate x:DataType="local:AuthorsModel">
+                    <ViewCell>
+                        <ViewCell.View>
+                            <Border
+                                Margin="5, 2.5, 5, 2.5">
+                                <Grid
+                                    ColumnDefinitions="0.25*, *"
+                                    RowDefinitions="1.5*, *">
+
+                                    <Image
+                                        Grid.Column="0"
+                                        Grid.RowSpan="2"
+                                        HeightRequest="40"
+                                        Margin="0, 0, 0, 0"
+                                        Source="{Binding Path=ImagePath}" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="0"
+                                        FontAttributes="Bold"
+                                        Text="{Binding Path=Author.Name}" />
+
+                                    <Label
+                                        Grid.Column="1"
+                                        Grid.Row="1">
+
+                                        <Label.Text>
+                                            <MultiBinding
+                                                StringFormat="{}Годы жизни: {0:dd.MM.yyyy} - {1:dd.MM.yyyy}">
+                                                <Binding
+                                                    Path="Author.DateBirth"
+                                                    FallbackValue="" />
+                                                <Binding
+                                                    Path="Author.DateDeath"
+                                                    FallbackValue="" />
+                                            </MultiBinding>
+                                        </Label.Text>
+                                    </Label>
+                                </Grid>
+                            </Border>
+                        </ViewCell.View>
+                        <ViewCell.ContextActions>
+                            <MenuItem
+                                Text="Изменить"
+                                Command="{Binding Path=BindingContext.EditAuthorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                            <MenuItem
+                                Text="Удалить"
+                                Command="{Binding Path=BindingContext.RemoveAuthorCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                CommandParameter="{Binding .}"
+                                IsDestructive="True" />
+                        </ViewCell.ContextActions>
+                    </ViewCell>
+                </DataTemplate>
+            </ListView.ItemTemplate>
+        </ListView>
+
+        <Button
+            Grid.RowSpan="2"
+            HeightRequest="80"
+            WidthRequest="80"
+            CornerRadius="40"
+            Padding="0"
+            FontAttributes="Bold"
+            FontSize="50"
+            HorizontalOptions="End"
+            VerticalOptions="End"
+            Margin="0, 0, 20, 20"
+            Text="+"
+            Command="{Binding Path=EditAuthorCommand}" />
+    </Grid>
+</ContentPage>
