@@ -17,6 +17,8 @@ namespace Library.Pages.Book.Content
         private readonly SeriesService _seriesService;
         private readonly CollectionService _collectionService;
 
+        private const int _takeFilteredItems = 10;
+
         [ObservableProperty]
         private ContentEditModel _editContent;
 
@@ -108,6 +110,7 @@ namespace Library.Pages.Book.Content
                         StringService.StringContains(x.Name, text) &&
                         !EditContent.Authors.Contains(x))
                     .OrderBy(x => x.Name)
+                    .Take(_takeFilteredItems)
                     .ToObservableCollection();
 
         [RelayCommand]
@@ -181,6 +184,7 @@ namespace Library.Pages.Book.Content
                         StringService.StringContains(x.Name, text) &&
                         !EditContent.Translators.Contains(x))
                     .OrderBy(x => x.Name)
+                    .Take(_takeFilteredItems)
                     .ToObservableCollection();
 
         [RelayCommand]
