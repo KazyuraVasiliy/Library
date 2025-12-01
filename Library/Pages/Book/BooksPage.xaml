@@ -9,6 +9,20 @@
     x:Name="Page"
     Title="Книги">
 
+    <ContentPage.ToolbarItems>
+        <ToolbarItem
+            Command="{Binding Path=SortCommand}">
+
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="FontAwesomeSolid"
+                    Glyph="&#xf884;"
+                    Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                    Size="20" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+    </ContentPage.ToolbarItems>
+    
     <Grid
         RowDefinitions="auto, *">
         

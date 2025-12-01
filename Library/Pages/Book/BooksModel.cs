@@ -21,10 +21,10 @@ namespace Library.Pages.Book
                 : "no_photo.png";
 
         public string Authors =>
-            string.Join("; ", Book.Authors.Select(x => x.Name));
+            string.Join("; ", Book.Authors.OrderBy(x => x.Name).Select(x => x.Name));
 
         public string Translators =>
-            string.Join("; ", Book.Translators.Select(x => x.Name));
+            string.Join("; ", Book.Translators.OrderBy(x => x.Name).Select(x => x.Name));
 
         public BooksModel(BookService? bookService, DataAccess.Models.Book book)
         {

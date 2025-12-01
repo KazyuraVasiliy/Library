@@ -43,6 +43,8 @@ namespace Library.Pages.Book
             _collectionService = collectionService;
 
             WeakReferenceMessenger.Default.Register<BooksChanged>(this);
+
+            _selectedSortField = PreferencesService.Book.SortField;
             Initialize();
         }
 
@@ -84,15 +86,33 @@ namespace Library.Pages.Book
         }
 
         [RelayCommand]
-        private void SearchBooks(string text) =>
-            FilteredBooks = Books
+        private void SearchBooks(string text)
+        {
+            var query = Books
                 .Where(x =>
                     StringService.StringContains(x.Book.Name, text) ||
                     StringService.StringContains(x.Authors, text) ||
                     StringService.StringContains(x.Book.Series?.Name, text) ||
-                    StringService.StringContains(x.Book.ISBN.Replace("-", ""), text.Replace("-", "")))
-                .OrderByDescending(x => x.Book.CreatedAt)
+                    StringService.StringContains(x.Book.ISBN.Replace("-", ""), text.Replace("-", "")));
+
+            if (_selectedSortField == 1)
+                query = query.OrderBy(x => x.Book.Name);
+            if (_selectedSortField == 2)
+                query = query.OrderByDescending(x => x.Book.Name);
+
+            if (_selectedSortField == 3)
+                query = query.OrderBy(x => x.Book.CreatedAt);
+            if (_selectedSortField == 4)
+                query = query.OrderByDescending(x => x.Book.CreatedAt);
+
+            if (_selectedSortField == 5)
+                query = query.OrderBy(x => x.Authors);
+            if (_selectedSortField == 6)
+                query = query.OrderBy(x => x.Book?.Series?.Name).ThenBy(x => x.Book.SeriesNumber);
+
+            FilteredBooks = query
                 .ToObservableCollection();
+        }
 
         [RelayCommand]
         private async Task EditBook(BooksModel? book = null)
@@ -136,5 +156,53 @@ namespace Library.Pages.Book
                     "Ошибка", ex.Message + ex?.InnerException?.Message, "Ok");
             }
         }
+
+        #region Sort
+
+        private int _selectedSortField;
+
+        private Dictionary<int, string> _sortFields =
+            new()
+            {
+                [1] = "Наименование (возрастание)",
+                [2] = "Наименование (убывание)",
+                [3] = "Дата добавления (возрастание)",
+                [4] = "Дата добавления (убывание)",
+                [5] = "Автор",
+                [6] = "Серия"
+            };
+
+        [RelayCommand]
+        private async Task Sort()
+        {
+            try
+            {
+                var buttons = _sortFields
+                    .Select(x => x.Key == _selectedSortField
+                        ? "* " + x.Value
+                        : x.Value)
+                    .ToArray();
+                
+                string sortField = await Shell.Current
+                    .DisplayActionSheet("Сортировка", "Отмена", null, buttons);
+
+                if (!string.IsNullOrWhiteSpace(sortField) && sortField != "Отмена")
+                {
+                    sortField = sortField.Trim('*', ' ');
+
+                    _selectedSortField = _sortFields.First(x => x.Value == sortField).Key;
+                    PreferencesService.Book.SortField = _selectedSortField;
+
+                    SearchBooks(SearchBooksString);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Ошибка", ex.Message + ex?.InnerException?.Message, "Ok");
+            }
+        }
+
+        #endregion
     }
 }
