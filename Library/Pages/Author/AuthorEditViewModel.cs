@@ -104,6 +104,9 @@ namespace Library.Pages.Author
 
         private async Task RemoveImage()
         {
+            if (string.IsNullOrWhiteSpace(EditAuthor.TempImagePath))
+                return;
+
             bool question = await Shell.Current.DisplayAlert(
                 "Удалить?", "Вы уверены, что хотите удалить изображение?", "Да", "Нет");
 

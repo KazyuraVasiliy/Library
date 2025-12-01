@@ -141,6 +141,9 @@ namespace Library.Pages.Book
 
         private async Task RemoveImage()
         {
+            if (string.IsNullOrWhiteSpace(EditBook.TempImagePath))
+                return;
+
             bool question = await Shell.Current.DisplayAlert(
                 "Удалить?", "Вы уверены, что хотите удалить изображение?", "Да", "Нет");
 
