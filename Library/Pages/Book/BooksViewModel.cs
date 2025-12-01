@@ -87,7 +87,10 @@ namespace Library.Pages.Book
         private void SearchBooks(string text) =>
             FilteredBooks = Books
                 .Where(x =>
-                    StringService.StringContains(x.Book.Name, text))
+                    StringService.StringContains(x.Book.Name, text) ||
+                    StringService.StringContains(x.Authors, text) ||
+                    StringService.StringContains(x.Book.Series?.Name, text) ||
+                    StringService.StringContains(x.Book.ISBN.Replace("-", ""), text.Replace("-", "")))
                 .OrderByDescending(x => x.Book.CreatedAt)
                 .ToObservableCollection();
 
