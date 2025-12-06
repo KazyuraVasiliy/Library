@@ -11,6 +11,18 @@
 
     <ContentPage.ToolbarItems>
         <ToolbarItem
+            Command="{Binding Path=SelectViewModeCommand}">
+
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="FontAwesomeSolid"
+                    Glyph="&#xf53c;"
+                    Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                    Size="20" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
+
+        <ToolbarItem
             Command="{Binding Path=SortCommand}">
 
             <ToolbarItem.IconImageSource>
@@ -41,7 +53,111 @@
                     EventName="TextChanged" />
             </SearchBar.Behaviors>
         </SearchBar>
-        
+
+        <RefreshView
+            Grid.Row="1"
+            Command="{Binding Path=RefreshCommand}"
+            IsRefreshing="{Binding Path=IsRefreshing}">
+
+            <RefreshView.Triggers>
+                <DataTrigger
+                    TargetType="RefreshView"
+                    Binding="{Binding Path=SelectedViewMode}"
+                    Value="1">
+                    <Setter 
+                        Property="IsVisible"
+                        Value="False"/>
+                </DataTrigger>
+            </RefreshView.Triggers>
+            
+            <CollectionView
+                ItemsSource="{Binding Path=FilteredBooks}">
+
+                <CollectionView.ItemsLayout>
+                    <GridItemsLayout 
+                        Orientation="Vertical" 
+                        Span="2" 
+                        VerticalItemSpacing="0" />
+                </CollectionView.ItemsLayout>
+            
+                <CollectionView.ItemTemplate>
+                    <DataTemplate
+                        x:DataType="local:BooksModel">
+
+                        <SwipeView>
+                            <SwipeView.RightItems>
+                                <SwipeItems>
+                                    <SwipeItemView
+                                        Command="{Binding Path=BindingContext.EditBookCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}">
+                                    
+                                        <Border
+                                            BackgroundColor="LightGreen"
+                                            WidthRequest="60"
+                                            HeightRequest="90">
+                                            <Label
+                                                VerticalTextAlignment="Center"
+                                                HorizontalTextAlignment="Center"
+                                                FontSize="30"
+                                                FontFamily="FontAwesomeSolid"
+                                                Text="&#xf044;" />
+                                        </Border>
+                                    </SwipeItemView>
+
+                                    <SwipeItemView
+                                        Command="{Binding Path=BindingContext.RemoveBookCommand, x:DataType={x:Type ContentPage}, Source={x:Reference Page}}"
+                                        CommandParameter="{Binding .}">
+                                    
+                                        <Border
+                                            BackgroundColor="LightPink"
+                                            WidthRequest="60"
+                                            HeightRequest="90">
+                                            <Label
+                                                VerticalTextAlignment="Center"
+                                                HorizontalTextAlignment="Center"
+                                                FontSize="30"
+                                                FontFamily="FontAwesomeSolid"
+                                                Text="&#xf2ed;" />
+                                        </Border>
+                                    </SwipeItemView>
+                                </SwipeItems>
+                            </SwipeView.RightItems>
+
+                            <Border
+                                HeightRequest="350"
+                                Padding="0">
+
+                                <Grid
+                                    RowDefinitions="9*, *, *">
+
+                                    <Image
+                                        Grid.Row="0"
+                                        Aspect="AspectFill"
+                                        Margin="0, 0, 0, 0"
+                                        Source="{Binding Path=SourceImagePath}" />
+
+                                    <Label
+                                        Grid.Row="1"
+                                        Margin="2"
+                                        LineBreakMode="TailTruncation"
+                                        FontAttributes="Bold"
+                                        VerticalTextAlignment="End"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Path=Book.Name}" />
+
+                                    <Label
+                                        Grid.Row="2"
+                                        LineBreakMode="TailTruncation"
+                                        HorizontalTextAlignment="Center"
+                                        Text="{Binding Path=Authors}" />
+                                </Grid>
+                            </Border>
+                        </SwipeView>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+            </CollectionView>
+        </RefreshView>
+
         <ListView
             Grid.Row="1"
             ItemsSource="{Binding Path=FilteredBooks}"
@@ -52,6 +168,17 @@
             IsPullToRefreshEnabled="True"
             RefreshCommand="{Binding Path=RefreshCommand}"
             IsRefreshing="{Binding Path=IsRefreshing}">
+
+            <ListView.Triggers>
+                <DataTrigger
+                    TargetType="ListView"
+                    Binding="{Binding Path=SelectedViewMode}"
+                    Value="2">
+                    <Setter
+                        Property="IsVisible"
+                        Value="False" />
+                </DataTrigger>
+            </ListView.Triggers>
 
             <ListView.ItemTemplate>
                 <DataTemplate x:DataType="local:BooksModel">

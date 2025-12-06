@@ -45,6 +45,8 @@ namespace Library.Pages.Book
             WeakReferenceMessenger.Default.Register<BooksChanged>(this);
 
             _selectedSortField = PreferencesService.Book.SortField;
+            _selectedViewMode = PreferencesService.Book.ViewMode;
+
             Initialize();
         }
 
@@ -192,6 +194,51 @@ namespace Library.Pages.Book
 
                     _selectedSortField = _sortFields.First(x => x.Value == sortField).Key;
                     PreferencesService.Book.SortField = _selectedSortField;
+
+                    SearchBooks(SearchBooksString);
+                }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Ошибка", ex.Message + ex?.InnerException?.Message, "Ok");
+            }
+        }
+
+        #endregion
+
+        #region View
+
+        [ObservableProperty]
+        private int _selectedViewMode;
+
+        private Dictionary<int, string> _viewModes =
+            new()
+            {
+                [1] = "Строчный",
+                [2] = "Блочный"
+            };
+
+        [RelayCommand]
+        private async Task SelectViewMode()
+        {
+            try
+            {
+                var buttons = _viewModes
+                    .Select(x => x.Key == SelectedViewMode
+                        ? "* " + x.Value
+                        : x.Value)
+                    .ToArray();
+
+                string viewMode = await Shell.Current
+                    .DisplayActionSheet("Режим отображения", "Отмена", null, buttons);
+
+                if (!string.IsNullOrWhiteSpace(viewMode) && viewMode != "Отмена")
+                {
+                    viewMode = viewMode.Trim('*', ' ');
+
+                    SelectedViewMode = _viewModes.First(x => x.Value == viewMode).Key;
+                    PreferencesService.Book.ViewMode = SelectedViewMode;
 
                     SearchBooks(SearchBooksString);
                 }

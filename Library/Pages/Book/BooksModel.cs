@@ -20,6 +20,12 @@ namespace Library.Pages.Book
                 ? _imagePath
                 : "no_photo.png";
 
+        private string _sourceImagePath = string.Empty;
+        public string SourceImagePath =>
+            IsImageExist
+                ? _sourceImagePath
+                : "no_photo.png";
+
         public string Authors =>
             string.Join("; ", Book.Authors.OrderBy(x => x.Name).Select(x => x.Name));
 
@@ -34,6 +40,7 @@ namespace Library.Pages.Book
             if (_bookService != null)
             {
                 _imagePath = _bookService.GetBookThumbImagePath(_book.ImageName);
+                _sourceImagePath = _bookService.GetBookImagePath(_book.ImageName);
                 _isImageExist = File.Exists(_imagePath);
             }
         }
