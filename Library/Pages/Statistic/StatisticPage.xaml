@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    x:Class="Library.Pages.Statistic.StatisticPage"
+    xmlns:local="clr-namespace:Library.Pages.Statistic"
+    xmlns:microcharts="clr-namespace:Microcharts.Maui;assembly=Microcharts.Maui"
+    x:DataType="local:StatisticViewModel"
+    x:Name="Page"
+    Title="Статистика">
+
+    <RefreshView
+        IsRefreshing="{Binding Path=IsRefreshing}"
+        Command="{Binding Path=RefreshCommand}">
+
+        <ScrollView>            
+            <VerticalStackLayout>
+                <Border>
+                    <VerticalStackLayout Margin="5">
+                        <Label
+                            Text="Прочитано по годам"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <ScrollView
+                            HeightRequest="300"
+                            HorizontalScrollBarVisibility="Always"
+                            Orientation="Horizontal">
+
+                            <microcharts:ChartView
+                                WidthRequest="{Binding Path=HaveReadPerYearWidthRequest}"
+                                Chart="{Binding Path=HaveReadPerYearChart}" />
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+
+                <Border>
+                    <VerticalStackLayout Margin="5">
+                        <Label
+                            Text="Прочитано по месяцам"
+                            Style="{StaticResource SubHeadline}" />
+
+                        <ScrollView
+                            x:Name="haveReadPerMonthScrollView"
+                            x:FieldModifier="public"
+                            HeightRequest="300"
+                            HorizontalScrollBarVisibility="Always"
+                            Orientation="Horizontal">
+
+                            <microcharts:ChartView
+                                WidthRequest="{Binding Path=HaveReadPerMonthWidthRequest}"
+                                Chart="{Binding Path=HaveReadPerMonthChart}" />
+                        </ScrollView>
+                    </VerticalStackLayout>
+                </Border>
+            </VerticalStackLayout>
+        </ScrollView>
+    </RefreshView>
+</ContentPage>

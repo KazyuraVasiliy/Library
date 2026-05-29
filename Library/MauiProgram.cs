@@ -5,9 +5,11 @@ using Library.Pages.Author;
 using Library.Pages.Book;
 using Library.Pages.Person;
 using Library.Pages.Series;
+using Library.Pages.Statistic;
 using Library.Services;
 using Library.Services.ProgressService;
 using Maui.NullableDateTimePicker;
+using Microcharts.Maui;
 
 namespace Library
 {
@@ -26,6 +28,7 @@ namespace Library
                     fonts.AddFont("FontAwesome-Solid.otf", "FontAwesomeSolid");
                 })
                 .UseMauiCommunityToolkit()
+                .UseMicrocharts()
                 .ConfigureNullableDateTimePicker();
 
             // Services
@@ -41,6 +44,7 @@ namespace Library
             builder.Services.AddSingleton(x => new AuthorService(databasePath, FileSystem.AppDataDirectory));
             builder.Services.AddSingleton(x => new PersonService(databasePath, FileSystem.AppDataDirectory));
             builder.Services.AddSingleton(x => new CollectionService(databasePath));
+            builder.Services.AddSingleton(x => new StatisticService(databasePath));
             builder.Services.AddSingleton(x => new ImportService(databasePath));
             builder.Services.AddSingleton<ProgressService>();
 
@@ -80,6 +84,12 @@ namespace Library
                 BindingContext = new PersonsViewModel(
                     x.GetRequiredService<PersonService>(),
                     x.GetRequiredService<ImageService>())
+            });
+
+            builder.Services.AddSingleton(x => new StatisticPage()
+            {
+                BindingContext = new StatisticViewModel(
+                    x.GetRequiredService<StatisticService>())
             });
 
             return builder.Build();

@@ -9,6 +9,7 @@
     xmlns:series="clr-namespace:Library.Pages.Series"
     xmlns:author="clr-namespace:Library.Pages.Author"
     xmlns:person="clr-namespace:Library.Pages.Person"
+    xmlns:statistic="clr-namespace:Library.Pages.Statistic"
     Shell.FlyoutBehavior="Flyout"
     Title="Library">
 
@@ -88,6 +89,19 @@
             </DataTemplate>
         </Shell.MenuItemTemplate>
     </MenuItem>
+
+    <ShellContent
+        Title="Статистика"
+        ContentTemplate="{DataTemplate statistic:StatisticPage}">
+
+        <ShellContent.Icon>
+            <FontImageSource
+                FontFamily="FontAwesomeSolid"
+                Glyph="&#xf201;"
+                Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                Size="50" />
+        </ShellContent.Icon>
+    </ShellContent>
 
     <MenuItem
         Text="Импорт"
