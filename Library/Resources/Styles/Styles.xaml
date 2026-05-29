@@ -793,6 +793,17 @@
     </Style>
 
     <Style
+        TargetType="ContentView"
+        ApplyToDerivedTypes="True">
+        <Setter
+            Property="Padding"
+            Value="0" />
+        <Setter
+            Property="BackgroundColor"
+            Value="{AppThemeBinding Light={StaticResource White}, Dark={StaticResource OffBlack}}" />
+    </Style>
+
+    <Style
         TargetType="Shell"
         ApplyToDerivedTypes="True">
         <Setter
