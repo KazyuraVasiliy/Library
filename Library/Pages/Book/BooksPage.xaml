@@ -33,6 +33,18 @@
                     Size="20" />
             </ToolbarItem.IconImageSource>
         </ToolbarItem>
+
+        <ToolbarItem
+            Command="{Binding Path=FilterCommand}">
+
+            <ToolbarItem.IconImageSource>
+                <FontImageSource
+                    FontFamily="FontAwesomeSolid"
+                    Glyph="&#xf0b0;"
+                    Color="{AppThemeBinding Light={StaticResource Black}, Dark={StaticResource White}}"
+                    Size="20" />
+            </ToolbarItem.IconImageSource>
+        </ToolbarItem>
     </ContentPage.ToolbarItems>
     
     <Grid

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentView
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:db="clr-namespace:DataAccess.Models;assembly=DataAccess"
+    xmlns:sc="clr-namespace:Library.Helpers"
+    x:Class="Library.Pages.Book.Filter.FilterEditView"
+    MaximumWidthRequest="250"
+    MaximumHeightRequest="400">
+
+    <Grid
+        RowDefinitions="*, auto, auto">
+
+        <ScrollView>
+            <VerticalStackLayout>
+
+                <Label
+                    Text="Статус:" />
+                <Grid
+                    ColumnDefinitions="*, auto">
+                    
+                    <Picker
+                        Grid.Column="0"
+                        x:Name="statusesPicker"
+                        ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Status}}"
+                        ItemsSource="{Binding Path=Statuses}"
+                        SelectedItem="{Binding Path=Filter.Status}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="&#x0058;"
+                        FontFamily="FontAwesomeSolid"
+                        Padding="0"
+                        HorizontalOptions="Start"
+                        MaximumWidthRequest="20"
+                        MaximumHeightRequest="20"
+                        Command="{x:Static sc:StaticCommands.ResetCommand}"
+                        CommandParameter="{x:Reference statusesPicker}" />
+                </Grid>
+
+                <Label
+                    Text="Язык:" />
+                <Grid
+                    ColumnDefinitions="*, auto">
+
+                    <Picker
+                        Grid.Column="0"
+                        x:Name="languagesPicker"
+                        ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Status}}"
+                        ItemsSource="{Binding Path=Languages}"
+                        SelectedItem="{Binding Path=Filter.Language}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="&#x0058;"
+                        FontFamily="FontAwesomeSolid"
+                        Padding="0"
+                        HorizontalOptions="Start"
+                        MaximumWidthRequest="20"
+                        MaximumHeightRequest="20"
+                        Command="{x:Static sc:StaticCommands.ResetCommand}"
+                        CommandParameter="{x:Reference languagesPicker}" />
+                </Grid>
+
+                <Label
+                    Text="Издатель:" />
+                <Grid
+                    ColumnDefinitions="*, auto">
+
+                    <Picker
+                        Grid.Column="0"
+                        x:Name="publishersPicker"
+                        ItemDisplayBinding="{Binding Path=Name, x:DataType={x:Type db:Status}}"
+                        ItemsSource="{Binding Path=Publishers}"
+                        SelectedItem="{Binding Path=Filter.Publisher}" />
+
+                    <Button
+                        Grid.Column="1"
+                        Text="&#x0058;"
+                        FontFamily="FontAwesomeSolid"
+                        Padding="0"
+                        HorizontalOptions="Start"
+                        MaximumWidthRequest="20"
+                        MaximumHeightRequest="20"
+                        Command="{x:Static sc:StaticCommands.ResetCommand}"
+                        CommandParameter="{x:Reference publishersPicker}" />
+                </Grid>
+            </VerticalStackLayout>
+        </ScrollView>
+
+        <Button
+            Grid.Row="1"
+            Text="Ok"
+            Margin="5"
+            Command="{Binding Path=OkCommand}" />
+
+        <Button
+            Grid.Row="2"
+            Text="Сбросить"
+            Margin="5"
+            Command="{Binding Path=ResetCommand}" />
+    </Grid>
+</ContentView>

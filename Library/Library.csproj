@@ -89,6 +89,9 @@
 	  <Compile Update="Pages\Book\Content\ContentEditPage.xaml.cs">
 	    <DependentUpon>ContentEditPage.xaml</DependentUpon>
 	  </Compile>
+	  <Compile Update="Pages\Book\Filter\FilterEditView.xaml.cs">
+	    <DependentUpon>FilterEditView.xaml</DependentUpon>
+	  </Compile>
 	  <Compile Update="Pages\Person\PersonsPage.xaml.cs">
 	    <DependentUpon>PersonsPage.xaml</DependentUpon>
 	  </Compile>
@@ -117,6 +120,9 @@
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Book\Content\ContentEditPage.xaml">
+	    <Generator>MSBuild:Compile</Generator>
+	  </MauiXaml>
+	  <MauiXaml Update="Pages\Book\Filter\FilterEditView.xaml">
 	    <Generator>MSBuild:Compile</Generator>
 	  </MauiXaml>
 	  <MauiXaml Update="Pages\Person\PersonEditPage.xaml">

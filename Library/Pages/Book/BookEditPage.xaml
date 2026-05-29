@@ -124,7 +124,8 @@
                                 Grid.Column="1">
 
                                 <Label
-                                    Text="Год издания:" />
+                                    Text="Год издания:"
+                                    LineBreakMode="TailTruncation" />
                                 <Entry
                                     Text="{Binding Path=EditBook.Book.PublishYear}"
                                     Keyboard="Numeric" />
@@ -165,7 +166,8 @@
                                 Grid.Column="1">
 
                                 <Label
-                                    Text="Номер в серии:" />
+                                    Text="Номер в серии:"
+                                    LineBreakMode="TailTruncation"/>
                                 <Entry
                                     Text="{Binding Path=EditBook.Book.SeriesNumber}"
                                     Keyboard="Numeric" />

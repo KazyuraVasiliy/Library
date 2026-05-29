@@ -71,7 +71,8 @@
                                 Grid.Column="1">
 
                                 <Label
-                                    Text="Номер в серии:" />
+                                    Text="Номер в серии:"
+                                    LineBreakMode="TailTruncation"/>
                                 <Entry
                                     Text="{Binding Path=EditContent.Content.SeriesNumber}"
                                     Keyboard="Numeric" />
@@ -95,7 +96,8 @@
                                 Grid.Column="1">
 
                                 <Label
-                                    Text="Уровень в содержании:" />
+                                    Text="Уровень в содержании:"
+                                    LineBreakMode="TailTruncation" />
                                 <Entry
                                     Text="{Binding Path=EditContent.Content.Level}"
                                     Keyboard="Numeric" />

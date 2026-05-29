@@ -1,15 +1,18 @@
-﻿using CommunityToolkit.Maui.Core.Extensions;
+﻿using CommunityToolkit.Maui;
+using CommunityToolkit.Maui.Core.Extensions;
+using CommunityToolkit.Maui.Extensions;
 using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using CommunityToolkit.Mvvm.Messaging;
 using DataAccess.Services;
 using Library.Messages;
+using Library.Pages.Book.Filter;
 using Library.Services;
 using System.Collections.ObjectModel;
 
 namespace Library.Pages.Book
 {
-    public partial class BooksViewModel : ObservableObject, IRecipient<BooksChanged>
+    public partial class BooksViewModel : ObservableObject, IRecipient<BooksChanged>, IRecipient<FilterChanged>
     {
         private readonly BookService _bookService;
         private readonly AuthorService _authorService;
@@ -43,6 +46,7 @@ namespace Library.Pages.Book
             _collectionService = collectionService;
 
             WeakReferenceMessenger.Default.Register<BooksChanged>(this);
+            WeakReferenceMessenger.Default.Register<FilterChanged>(this);
 
             _selectedSortField = PreferencesService.Book.SortField;
             _selectedViewMode = PreferencesService.Book.ViewMode;
@@ -90,7 +94,21 @@ namespace Library.Pages.Book
         [RelayCommand]
         private void SearchBooks(string text)
         {
-            var query = Books
+            IEnumerable<BooksModel>? query = Books.AsEnumerable();
+
+            if (_filter.StatusId != null)
+                query = query
+                    .Where(x => x.Book.StatusId == _filter.StatusId);
+
+            if (_filter.LanguageId != null)
+                query = query
+                    .Where(x => x.Book.LanguageId == _filter.LanguageId);
+
+            if (_filter.PublisherId != null)
+                query = query
+                    .Where(x => x.Book.PublisherId == _filter.PublisherId);
+
+            query = query
                 .Where(x =>
                     StringService.StringContains(x.Book.Name, text) ||
                     StringService.StringContains(x.Authors, text) ||
@@ -242,6 +260,37 @@ namespace Library.Pages.Book
 
                     SearchBooks(SearchBooksString);
                 }
+            }
+            catch (Exception ex)
+            {
+                await Shell.Current.DisplayAlert(
+                    "Ошибка", ex.Message + ex?.InnerException?.Message, "Ok");
+            }
+        }
+
+        #endregion
+
+        #region Filter
+
+        private FilterModel _filter = new();
+
+        public void Receive(FilterChanged message)
+        {
+            _filter = message.Value;
+            SearchBooks(SearchBooksString);
+        }
+
+        [RelayCommand]
+        private async Task Filter()
+        {
+            try
+            {
+                var popup = new FilterEditView();
+                popup.BindingContext = new FilterEditViewModel(
+                    _collectionService,
+                    _filter);
+
+                Shell.Current.Navigation.ShowPopup(popup);
             }
             catch (Exception ex)
             {
